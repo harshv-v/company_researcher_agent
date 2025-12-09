@@ -18,80 +18,73 @@ The system operates on a **Dual-Pipeline Architecture**. The API Gateway routes 
 ```mermaid
 graph TD
     %% Styling
-    classDef ai fill:#f9f,stroke:#333,stroke-width:2px,color:black;
-    classDef db fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:black;
-    classDef ext fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:black;
-    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:black;
+    classDef ai fill:#f9f,stroke:#333,stroke-width:1px,color:black;
+    classDef db fill:#e1f5fe,stroke:#0277bd,stroke-width:1px,color:black;
+    classDef ext fill:#fff3e0,stroke:#ef6c00,stroke-width:1px,color:black;
+    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px,color:black;
 
-    User([👤 User / Client]) -->|HTTP POST| API[🚀 FastAPI Gateway
-(main.py)]
+    User([👤 User / Client]) -->|HTTP POST| API[🚀 FastAPI Gateway (main.py)]
 
-    %% MEMORY LAYER
-    subgraph Memory_Layer [🧠 Tiered Memory System]
-        Redis[(🔴 Redis
-Short-Term Context)]:::db
-        Qdrant[(🔵 Qdrant
-Long-Term Knowledge)]:::db
+    %% MEMORY
+    subgraph Memory_Layer [Tiered Memory System]
+        Redis[(🔴 Redis Short-Term Context)]:::db
+        Qdrant[(🔵 Qdrant Long-Term Knowledge)]:::db
     end
 
-    %% PHASE 1: RESEARCH
-    subgraph Phase1 [Phase 1: The Builder (Deep Research Engine)]
+    %% PHASE 1
+    subgraph Phase1 [Phase 1: Deep Research Engine]
         RP[Research Pipeline]:::logic
         Scout[🕵️ Scout Agent]:::ai
         Strat[♟️ Strategist Agent]:::ai
         Writer[✍️ Writer Agent]:::ai
-        Crawler[🕷️ Deep Crawler
-(Playwright + BS4)]:::ext
+        Crawler[🕷️ Deep Crawler (Playwright + BS4)]:::ext
     end
 
-    %% PHASE 2: CHAT
-    subgraph Phase2 [Phase 2: The Brain (Conversational OS)]
+    %% PHASE 2
+    subgraph Phase2 [Phase 2: Conversational OS]
         CP[Chat Pipeline]:::logic
-        Orch[🚦 Orchestrator
-(The Boss)]:::ai
+        Orch[🚦 Orchestrator (The Boss)]:::ai
         Decomp[🧩 Decomposer]:::ai
-        Evid[⚖️ Evidencer
-(The Auditor)]:::ai
+        Evid[⚖️ Evidencer (Auditor)]:::ai
         Refine[🔄 Refiner]:::ai
         Ans[🗣️ Answer Agent]:::ai
     end
 
-    %% EXTERNAL TOOLS
-    subgraph Tools [🛠️ External Tool Shed]
-        Serp[🌍 SerpApi / Serper
-(Web Search)]:::ext
+    %% TOOLS
+    subgraph Tools [External Tool Shed]
+        Serp[🌍 SerpApi / Serper (Web Search)]:::ext
     end
 
-    %% CONNECTIONS
     API -->|/research| RP
     API -->|/chat| CP
 
     %% P1 Logic
     RP --> Scout --> Strat
     Strat --> Serp --> Writer
-    Writer -->|Save Final Report| Qdrant
-    RP -.->|Trigger Background Task| Crawler
-    Crawler -->|Spider & Clean Pages| Qdrant
+    Writer -->|Save Report| Qdrant
+    RP -.->|Trigger Crawler| Crawler
+    Crawler -->|Spider & Clean| Qdrant
 
     %% P2 Logic
-    CP -->|Get Chat History| Redis
+    CP -->|Fetch History| Redis
     CP --> Orch
     Orch -->|Simple Chat| Ans
     Orch -->|Complex Query| Decomp
 
-    %% THE SELF-HEALING LOOP
+    %% Self-Healing Loop
     Decomp -->|Sub-Queries| Tools_Agent[Tools Manager]:::logic
-    Tools_Agent -->|1. Check Memory| Qdrant
-    Tools_Agent -->|2. Fallback to Web| Serp
-    Tools_Agent -->|3. Gathered Evidence| Evid
-    
-    Evid -->|❌ Data Insufficient| Refine
-    Refine -->|New Search Query| Tools_Agent
-    Evid -->|✅ Data Sufficient| Ans
+    Tools_Agent -->|Check Memory| Qdrant
+    Tools_Agent -->|Fallback Web Search| Serp
+    Tools_Agent -->|Provide Evidence| Evid
 
-    Ans -->|Save Chat Turn| Redis
-    Ans -->|Final Response| User
+    Evid -->|Insufficient| Refine
+    Refine -->|New Query| Tools_Agent
+    Evid -->|Sufficient| Ans
+
+    Ans -->|Save Turn| Redis
+    Ans -->|Final Reply| User
 ```
+
 
 ## 🛠️ Tech Stack & Tools
 
