@@ -1,4 +1,4 @@
-# Unified Agent: The Self-Healing Research OS
+# Company Researcher Agent: The Self-Healing Research OS
 
 ![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python\&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-High_Performance-009688?logo=fastapi\&logoColor=white)
@@ -140,7 +140,7 @@ docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage qdrant/qdran
 
 ```
 git clone <repo-url>
-cd bowmen_unified
+cd company_researcher_agent
 pip install -r requirements.txt
 playwright install chromium
 ```
@@ -189,7 +189,7 @@ curl -X POST "http://localhost:8000/chat" \
 ## 📂 Project Structure
 
 ```
-bowmen_unified/
+company_researcher_agent/
 ├── main.py                    
 ├── config/
 │   ├── prompts.yaml           
