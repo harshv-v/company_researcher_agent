@@ -23,9 +23,8 @@ graph TD
     classDef ext fill:#fff3e0,stroke:#ef6c00,stroke-width:1px,color:black;
     classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px,color:black;
 
-    User([👤 User / Client]) -->|POST| API[FastAPI Gateway]
+    User([User / Client]) -->|POST| API[FastAPI Gateway]
 
-    
     %% MEMORY LAYER
     subgraph Memory_Layer [Tiered Memory System]
         Redis[(Redis Short-Term Context)]:::db
@@ -38,7 +37,7 @@ graph TD
         Scout[Scout Agent]:::ai
         Strat[Strategist Agent]:::ai
         Writer[Writer Agent]:::ai
-        Crawler[Deep Crawler (Playwright+BS4)]:::ext
+        Crawler[Deep Crawler - Playwright + BS4]:::ext
     end
 
     %% PHASE 2
@@ -51,7 +50,7 @@ graph TD
         Ans[Answer Agent]:::ai
     end
 
-    %% EXTERNAL TOOLS
+    %% TOOLS
     subgraph Tools [External Tools]
         Serp[SerpApi / Serper]:::ext
     end
@@ -61,9 +60,9 @@ graph TD
 
     RP --> Scout --> Strat
     Strat --> Serp --> Writer
-    Writer -->|Save| Qdrant
-    RP -.->|Trigger| Crawler
-    Crawler -->|Index| Qdrant
+    Writer -->|Save Report| Qdrant
+    RP -.->|Trigger Crawler| Crawler
+    Crawler -->|Index Pages| Qdrant
 
     CP -->|Load History| Redis
     CP --> Orch
@@ -75,9 +74,9 @@ graph TD
     Tools_Agent -->|Web| Serp
     Tools_Agent -->|Evidence| Evid
 
-    Evid -->|❌| Refine
+    Evid -->|Insufficient| Refine
     Refine --> Tools_Agent
-    Evid -->|✅| Ans
+    Evid -->|Sufficient| Ans
 
     Ans -->|Save| Redis
     Ans --> User
