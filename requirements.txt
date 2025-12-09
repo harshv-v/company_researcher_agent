@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+openai
+python-dotenv
+requests
+redis
+qdrant-client[fastembed]
+pyyaml
+tenacity
+beautifulsoup4
+markdownify
+playwright
+markitdown
