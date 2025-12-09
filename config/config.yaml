@@ -1,0 +1,20 @@
+llm:
+  model_id: "gpt-4o-mini"
+  temperature: 0.3
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  allowed_origins: ["*"]
+
+memory:
+  redis_host: "localhost"
+  redis_port: 6379
+  qdrant_host: "localhost"
+  qdrant_port: 6333
+
+tools:
+  # Universal Endpoint - The code handles the switch based on Key
+  serper_api_endpoint: "https://serpapi.com/search" 
+  max_loops: 3
+  scrape_limit: 100
