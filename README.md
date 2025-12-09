@@ -23,66 +23,64 @@ graph TD
     classDef ext fill:#fff3e0,stroke:#ef6c00,stroke-width:1px,color:black;
     classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px,color:black;
 
-    User([👤 User / Client]) -->|HTTP POST| API[🚀 FastAPI Gateway (main.py)]
+    User([👤 User / Client]) -->|POST| API[FastAPI Gateway]
 
-    %% MEMORY
+    
+    %% MEMORY LAYER
     subgraph Memory_Layer [Tiered Memory System]
-        Redis[(🔴 Redis Short-Term Context)]:::db
-        Qdrant[(🔵 Qdrant Long-Term Knowledge)]:::db
+        Redis[(Redis Short-Term Context)]:::db
+        Qdrant[(Qdrant Long-Term Knowledge)]:::db
     end
 
     %% PHASE 1
     subgraph Phase1 [Phase 1: Deep Research Engine]
         RP[Research Pipeline]:::logic
-        Scout[🕵️ Scout Agent]:::ai
-        Strat[♟️ Strategist Agent]:::ai
-        Writer[✍️ Writer Agent]:::ai
-        Crawler[🕷️ Deep Crawler (Playwright + BS4)]:::ext
+        Scout[Scout Agent]:::ai
+        Strat[Strategist Agent]:::ai
+        Writer[Writer Agent]:::ai
+        Crawler[Deep Crawler (Playwright+BS4)]:::ext
     end
 
     %% PHASE 2
     subgraph Phase2 [Phase 2: Conversational OS]
         CP[Chat Pipeline]:::logic
-        Orch[🚦 Orchestrator (The Boss)]:::ai
-        Decomp[🧩 Decomposer]:::ai
-        Evid[⚖️ Evidencer (Auditor)]:::ai
-        Refine[🔄 Refiner]:::ai
-        Ans[🗣️ Answer Agent]:::ai
+        Orch[Orchestrator]:::ai
+        Decomp[Decomposer]:::ai
+        Evid[Evidencer]:::ai
+        Refine[Refiner]:::ai
+        Ans[Answer Agent]:::ai
     end
 
-    %% TOOLS
-    subgraph Tools [External Tool Shed]
-        Serp[🌍 SerpApi / Serper (Web Search)]:::ext
+    %% EXTERNAL TOOLS
+    subgraph Tools [External Tools]
+        Serp[SerpApi / Serper]:::ext
     end
 
     API -->|/research| RP
     API -->|/chat| CP
 
-    %% P1 Logic
     RP --> Scout --> Strat
     Strat --> Serp --> Writer
-    Writer -->|Save Report| Qdrant
-    RP -.->|Trigger Crawler| Crawler
-    Crawler -->|Spider & Clean| Qdrant
+    Writer -->|Save| Qdrant
+    RP -.->|Trigger| Crawler
+    Crawler -->|Index| Qdrant
 
-    %% P2 Logic
-    CP -->|Fetch History| Redis
+    CP -->|Load History| Redis
     CP --> Orch
-    Orch -->|Simple Chat| Ans
-    Orch -->|Complex Query| Decomp
+    Orch -->|Simple| Ans
+    Orch -->|Complex| Decomp
 
-    %% Self-Healing Loop
-    Decomp -->|Sub-Queries| Tools_Agent[Tools Manager]:::logic
-    Tools_Agent -->|Check Memory| Qdrant
-    Tools_Agent -->|Fallback Web Search| Serp
-    Tools_Agent -->|Provide Evidence| Evid
+    Decomp --> Tools_Agent[Tools Manager]:::logic
+    Tools_Agent -->|Memory| Qdrant
+    Tools_Agent -->|Web| Serp
+    Tools_Agent -->|Evidence| Evid
 
-    Evid -->|Insufficient| Refine
-    Refine -->|New Query| Tools_Agent
-    Evid -->|Sufficient| Ans
+    Evid -->|❌| Refine
+    Refine --> Tools_Agent
+    Evid -->|✅| Ans
 
-    Ans -->|Save Turn| Redis
-    Ans -->|Final Reply| User
+    Ans -->|Save| Redis
+    Ans --> User
 ```
 
 
